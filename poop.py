@@ -14,7 +14,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS logins (
                 password text
                 )""")
 
-
 def firstp():
     global myLogin
     global myCreate
@@ -35,14 +34,22 @@ def firstp():
 ##    myWord.grid(row=1, column=2)
 
 
-
 def getInfo():
 
     userN = str(user.get())
     password = str(passw.get())
+    if "notFound" in globals():
+            accnotFound.destroy()
+            print("bruh")
+    else:
+        pass
+
+    
     search(userN, password)
     
 
+   
+    
 
 def search(userN, password):
         c.execute("SELECT * FROM logins WHERE user = ? AND password = ?", (userN, password))
@@ -55,7 +62,6 @@ def search(userN, password):
         else:
             again()
 
-
 def loginW():
     global passw
     global passwL
@@ -67,18 +73,18 @@ def loginW():
     global notFound
     global accnotFound
 
-    if notFound == 1:
-        accnotFound.destroy()
+    if "notFound" in globals():
+            accnotFound.destroy()
     else:
         pass
-    
+   
     passw.destroy()
     passwL.destroy()
     user.destroy()
     userL.destroy()
     mySignin.destroy()
     userpassWarn.destroy()
-
+    myBack.destroy()
     
     welc = Label(root,text="Account found, login successful")
     welc.config(anchor=CENTER)
@@ -95,7 +101,6 @@ def loginW():
 def again():
     global accnotFound
     global notFound
-    notFound = 0
     accnotFound = Label(root, text ="Account not found, try again")
     notFound = 1
     accnotFound.grid(row=4, column=0, columnspan = 3)
@@ -114,7 +119,7 @@ def pagetwo():
     global passwL
     global mySignin
     global userpassWarn
-    
+    global myBack    
 
     userpassWarn = Button(root, text="Please beware passwords are case sensitive.", padx=40, pady=3)
     userpassWarn.grid(row=0,column=0,columnspan=3)
@@ -129,8 +134,51 @@ def pagetwo():
     passw.grid(row=2,column=1,columnspan=2)
     passwL.grid(row=2,column=0)
 
-    mySignin = Button(root, text="Sign in", padx=10, pady=10, command= getInfo)
+    mySignin = Button(root, text="Sign in", padx=30, pady=10, command= getInfo)
     mySignin.grid(row=3,column=1)
+
+    myBack = Button(root, text="Go back", padx=30, pady=10, command= backpageL)
+    myBack.grid(row=3,column=2)
+
+
+def backpageL():
+    global mySignin
+    global userpassWarn
+    global passw
+    global passwL
+    global user
+    global userL
+    global myBack
+    
+    
+    if "notFound" in globals():
+            accnotFound.destroy()
+            print("bruh")
+    else:
+        pass
+
+    mySignin.destroy()
+    userpassWarn.destroy()
+    passw.destroy()
+    user.destroy()
+    userL.destroy()
+    passwL.destroy()
+    myBack.destroy()
+    
+
+    global myLogin
+    global myCreate
+    global myWord
+    myLogin = Button(root, text="Login", command=pagetwo,justify='center')
+    myCreate = Button(root, text="Create An Account", command=pagethree,padx = 40)
+    myWord = Label(root, text="Or",padx = 40)
+
+    myLogin.config(anchor=CENTER)
+    myLogin.pack()
+    myWord.config(anchor=CENTER)
+    myWord.pack()
+    myCreate.config(anchor=CENTER)
+    myCreate.pack()    
 
 def pagethree():
     root.title("POOP Inc: create an account")
@@ -143,6 +191,7 @@ def pagethree():
     global userL
     global mySignin
     global passReq
+    global myBack
 
     passReq = Button(root, text="Password must be 8 letters/numbers long.", padx=40, pady=3)
     passReq.grid(row=0,column=0,columnspan=3)
@@ -161,28 +210,86 @@ def pagethree():
     mySignin = Button(root, text="Create Account", padx=10, pady=10, command= usernameSearch)
     mySignin.grid(row=3,column=1)
 
+    myBack= Button(root, text="Go back", padx=30, pady=10, command= backpageC)
+    myBack.grid(row=3,column=2)
+
+
+def backpageC():
+    global mySignin
+    global passReq
+    global passw
+    global passwL
+    global user
+    global userL
+    global myBack
+    
+    if "userC" in globals():
+            userAvail.destroy()
+
+    else:
+        pass
+    
+    if "check2" in globals():
+            badPass.destroy()
+            print("bruh")
+    else:
+        pass
+
+    mySignin.destroy()
+    passReq.destroy()
+    passw.destroy()
+    user.destroy()
+    userL.destroy()
+    passwL.destroy()
+    myBack.destroy()
+    
+    global myLogin
+    global myCreate
+    global myWord
+    myLogin = Button(root, text="Login", command=pagetwo,justify='center')
+    myCreate = Button(root, text="Create An Account", command=pagethree,padx = 40)
+    myWord = Label(root, text="Or",padx = 40)
+
+    myLogin.config(anchor=CENTER)
+    myLogin.pack()
+    myWord.config(anchor=CENTER)
+    myWord.pack()
+    myCreate.config(anchor=CENTER)
+    myCreate.pack()   
+
+
 def usernameSearch():
     global passW
     global checker
-    global userPoop
+    global userC
     global userAvail
     userN = str(user.get())
     passW = str(user.get())
-    userPoop = 0
-    
+
+    if "userC" in globals():
+            userAvail.destroy()
+    else:
+        pass
+    if "check2" in globals():
+            badPass.destroy()
+            print("bruh")
+    else:
+        pass
     
     c.execute("SELECT * FROM logins WHERE user= ?", (userN,)) 
     userExist = c.fetchall()
     if userExist:
         userAvail = Label(root, text="Sorry, that username is unavailable")
         userAvail.grid(row=4,column=0,columnspan=3)
-        userPoop = 1
+        userC = 1
     else:
-        passcheck()
-        if checker == 1:
-            AccountYes()
+        if "userC" in globals():
+            userAvail.destroy()
         else:
             pass
+
+        passcheck()
+
 
 def createW():
     global passw
@@ -192,13 +299,8 @@ def createW():
     global userL
     global mySignin
     global passReq
-    global userPoop
-    global userAvail
-    
-    if userPoop == 1:
-        userAvail.destroy()
-    else:
-        pass 
+    global check2
+    global userC
     
     passw.destroy()
     passwL.destroy()
@@ -206,10 +308,11 @@ def createW():
     userL.destroy()
     mySignin.destroy()
     passReq.destroy()
+    myBack.destroy()
     welc = Label(root,text="Account created successfully,")
     welc.config(anchor=CENTER)
     welc.pack()
-    welc2 = Label(root,text="Welcome")
+    welc2 = Label(root,text="Welcome to")
     welc2.config(anchor=CENTER)
     welc2.pack()
     welc3 = Label(root,text="Poop Incorporated")
@@ -251,13 +354,10 @@ def passcheck():
             print("bruh")
         else:
             pass
-            
-        checker = 1
+
+        AccountYes()
         pass
-        
-        
-
-
+                
 
 def logged_in(): 
     pass
@@ -268,5 +368,4 @@ root.resizable(False, False)
 root.title("POOP Inc")
 firstp()
 root.mainloop()
-
 
